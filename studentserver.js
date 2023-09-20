@@ -329,6 +329,71 @@ function checkStudentExists(files, obj, fname, lname, res) {
 
 }
 
+//new objective
+
+/**
+ * @swagger
+ * /students/search/{last_name}:
+ *   get:
+ *     summary: Search for students by last name.
+ *     description: Use this endpoint to search for students by their last name.
+ *     parameters:
+ *       - name: last_name
+ *         description: Student's last name to search for.
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Success. An array of students matching the last name has been retrieved.
+ *       404:
+ *         description: Error. No students found with the provided last name.
+ */
+app.get('/students/search/:last_name', function (req, res) {
+  var searchLastName = req.params.last_name;
+  var foundStudents = [];
+
+  glob("students/*.json", null, function (err, files) {
+    if (err) {
+      return res.status(500).send({ message: 'error - internal server error' });
+    }
+
+    const readFilePromises = files.map((file) => {
+      return new Promise((resolve, reject) => {
+        fs.readFile(file, 'utf8', function (err, data) {
+          if (err) {
+            return reject(err);
+          }
+
+          const student = JSON.parse(data);
+          if (student.last_name === searchLastName) {
+            foundStudents.push(student);
+          }
+
+          resolve();
+        });
+      });
+    });
+
+    Promise.all(readFilePromises)
+      .then(() => {
+        if (foundStudents.length === 0) {
+          return res.status(404).send({ message: 'error - no students found with the provided last name' });
+        }
+
+        var obj = { students: foundStudents };
+        return res.status(200).send(obj);
+      })
+      .catch((err) => {
+        return res.status(500).send({ message: 'error - internal server error' });
+      });
+  });
+});
+
+
+
+
 app.listen(5678); //start the server
 console.log('Server is running...');
 console.log('Webapp:   http://localhost:5678/')
