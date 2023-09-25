@@ -1,0 +1,51 @@
+<!-- filename: getStudent.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Get Student by ID</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+  <label for="studentId">Student ID:</label>
+  <input type="text" id="studentId" name="studentId"><br><br>
+
+  <button onclick="getStudent()">Get Student by ID</button>
+  <br>
+  <br>
+  <pre id="mydiv" name="mydiv"></pre>
+
+  <script>
+
+    function getStudent() {
+      var studentId_val = $("#studentId").val();
+
+      $.ajax({
+        url: "http://localhost:5678/students/" + studentId_val, // Endpoint to retrieve a student by ID
+        type: "get",
+        success: function (student) {
+          if (student.hasOwnProperty('record_id')) {
+            var formattedText =
+              "ID: " + student.record_id + "\n" +
+              "First Name: " + student.first_name + "\n" +
+              "Last Name: " + student.last_name + "\n" +
+              "Enrolled: " + student.enrolled + "\n";
+
+            $("#mydiv").text(formattedText); // Display the formatted text
+          } else {
+            $("#mydiv").text("Student not found.");
+          }
+        },
+        error: function (xhr) {
+          $("#mydiv").text('error: ' + xhr.responseText);
+        }
+      });
+    }
+
+  </script>
+
+</body>
+
+</html>

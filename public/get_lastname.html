@@ -1,0 +1,60 @@
+<!-- filename: searchStudents.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Search Student by Last Name</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+  <label for="last_name">Last Name:</label>
+  <input type="text" id="last_name" name="last_name"><br><br>
+
+  <button onclick="searchStudent()">Search</button>
+  <br>
+  <br>
+  <div id="mydiv" name="mydiv"></div>
+
+  <script>
+
+    function searchStudent() {
+      var last_name_val = $("#last_name").val();
+
+      $.ajax({
+        url: "http://localhost:5678/students/search/" + last_name_val,
+        type: "get",
+        success: function (response) {
+          console.log(response);
+
+          var studentsList = response.students.map(function (student) {
+            return {
+              "ID": student.record_id,
+              "First Name": student.first_name,
+              "Last Name": student.last_name,
+              "Enrolled": student.enrolled
+            };
+          });
+
+          var formattedList = studentsList.map(function (student) {
+            return "ID: " + student.ID + "\n" +
+                   "First Name: " + student["First Name"] + "\n" +
+                   "Last Name: " + student["Last Name"] + "\n" +
+                   "Enrolled: " + student.Enrolled + "\n";
+          });
+
+          $("#mydiv").text(formattedList.join("\n"));
+        },
+        error: function (xhr) {
+          console.log(xhr.responseText)
+          $("#mydiv").text('error: ' + xhr.responseText);
+        }
+      });
+    }
+
+  </script>
+
+</body>
+
+</html>

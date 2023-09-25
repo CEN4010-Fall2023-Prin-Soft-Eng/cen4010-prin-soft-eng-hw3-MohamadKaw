@@ -1,0 +1,43 @@
+<!-- filename: deleteStudent.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Delete Student</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+  <label for="studentId">Student ID:</label>
+  <input type="text" id="studentId" name="studentId"><br><br>
+
+  <button onclick="deleteStudent()">Delete Student</button>
+  <br>
+  <br>
+  <div id="mydiv" name="mydiv"></div>
+
+  <script>
+
+    function deleteStudent() {
+      var studentId_val = $("#studentId").val();
+
+      $.ajax({
+        url: "http://localhost:5678/students/" + studentId_val, // Endpoint to delete a student by ID
+        type: "delete",
+        success: function (response) {
+          console.log(response)
+          $("#mydiv").text(response.message);
+        },
+        error: function (xhr) {
+          console.log(xhr.responseText)
+          $("#mydiv").text('error: ' + xhr.responseText);
+        }
+      });
+    }
+
+  </script>
+
+</body>
+
+</html>

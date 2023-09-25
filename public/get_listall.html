@@ -1,0 +1,61 @@
+<!-- filename: listAllStudents.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>List All Students</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <style>
+    /* Add some basic styling to format the list */
+    #mydiv {
+      white-space: pre-line; /* This ensures line breaks are preserved */
+    }
+  </style>
+</head>
+
+<body>
+
+  <button onclick="listAllStudents()">List All Students</button>
+  <br>
+  <br>
+  <div id="mydiv" name="mydiv"></div>
+
+  <script>
+
+    function listAllStudents() {
+      $.ajax({
+        url: "http://localhost:5678/students",
+        type: "get",
+        success: function (response) {
+          console.log(response);
+
+          var studentsList = response.students.map(function (student) {
+            return {
+              "ID": student.record_id,
+              "First Name": student.first_name,
+              "Last Name": student.last_name,
+              "Enrolled": student.enrolled
+            };
+          });
+
+          var formattedList = studentsList.map(function (student) {
+            return "ID: " + student.ID + "\n" +
+                   "First Name: " + student["First Name"] + "\n" +
+                   "Last Name: " + student["Last Name"] + "\n" +
+                   "Enrolled: " + student.Enrolled + "\n";
+          });
+
+          $("#mydiv").text(formattedList.join("\n"));
+        },
+        error: function (xhr) {
+          console.log(xhr.responseText)
+          $("#mydiv").text('error: ' + xhr.responseText);
+        }
+      });
+    }
+
+  </script>
+
+</body>
+
+</html>

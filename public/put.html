@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Update Student</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+
+  <label for="studentID">Student ID:</label>
+  <input type="text" id="studentID" name="studentID"><br><br>
+
+  <label for="fname">First Name:</label>
+  <input type="text" id="fname" name="first_name"><br><br>
+
+  <label for="lname">Last Name:</label>
+  <input type="text" id="lname" name="last_name"><br><br>
+
+  <label for="gpa">GPA:</label>
+  <input type="text" id="gpa" name="gpa"><br><br>
+
+  <label for="enrolled">Enrolled:</label>
+  <input type="text" id="enrolled" name="enrolled"><br><br>
+
+  <button onclick="updateStudent()">Update Student</button>
+  <br>
+  <br>
+  <div id="mydiv" name="mydiv"></div>
+  <script>
+
+    function updateStudent() {
+      var studentID = $("#studentID").val();
+      var fname_val = $("#fname").val();
+      var lname_val = $("#lname").val();
+      var gpa_val = $("#gpa").val();
+      var enrolled_val = $("#enrolled").val();
+
+      // Create a student object to send as JSON
+      var studentData = {
+        first_name: fname_val,
+        last_name: lname_val,
+        gpa: gpa_val,
+        enrolled: enrolled_val
+      };
+
+      $.ajax({
+        url: "http://localhost:5678/students/" + studentID,
+        type: "PUT",
+        contentType: "application/json", // Set content type to JSON
+        data: JSON.stringify(studentData), // Convert data to JSON string
+        success: function (response) {
+          console.log(response);
+          $("#mydiv").text(response.message);
+        },
+        error: function (xhr) {
+          console.log(xhr.responseText);
+          $("#mydiv").text('Error: ' + xhr.responseText);
+        }
+      });
+    }
+  </script>
+
+</body>
+
+</html>
