@@ -38,13 +38,13 @@
           });
 
           var formattedList = studentsList.map(function (student) {
-            return "ID: " + student.ID + "\n" +
-                   "First Name: " + student["First Name"] + "\n" +
-                   "Last Name: " + student["Last Name"] + "\n" +
-                   "Enrolled: " + student.Enrolled + "\n";
+            return "ID: " + student.ID + "<br>" +
+                   "First Name: " + student["First Name"] + "<br>" +
+                   "Last Name: " + student["Last Name"] + "<br>" +
+                   "Enrolled: " + student.Enrolled + "<br>";
           });
 
-          $("#mydiv").text(formattedList.join("\n"));
+          $("#mydiv").html(formattedList.join("<br><br>"));
         },
         error: function (xhr) {
           console.log(xhr.responseText)
@@ -55,7 +55,7 @@
 
   </script>
 
-<p><a href="index.html">Back to Home</a></p>
+  <p><a href="index2.html">Back to Home</a></p>
 
 </body>
 

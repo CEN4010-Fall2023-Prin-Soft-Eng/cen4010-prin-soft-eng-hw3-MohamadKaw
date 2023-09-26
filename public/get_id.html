@@ -1,44 +1,48 @@
-<!-- filename: getStudent.html -->
+<!-- filename: getStudentById.html -->
 <!DOCTYPE html>
 <html>
 
 <head>
-  <title>Get Student by ID</title>
+  <title>Get Student by Record ID</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
 <body>
 
-  <label for="studentId">Student ID:</label>
-  <input type="text" id="studentId" name="studentId"><br><br>
+  <label for="record_id">Record ID:</label>
+  <input type="text" id="record_id" name="record_id"><br><br>
 
   <button onclick="getStudent()">Get Student by ID</button>
   <br>
   <br>
-  <pre id="mydiv" name="mydiv"></pre>
+  <div id="mydiv" name="mydiv"></div>
 
   <script>
 
     function getStudent() {
-      var studentId_val = $("#studentId").val();
+      var record_id_val = $("#record_id").val();
 
       $.ajax({
-        url: "http://localhost:5678/students/" + studentId_val, // Endpoint to retrieve a student by ID
+        url: "http://localhost:5678/students/search/" + record_id_val, // Endpoint to retrieve a student by ID
         type: "get",
-        success: function (student) {
-          if (student.hasOwnProperty('record_id')) {
-            var formattedText =
-              "ID: " + student.record_id + "\n" +
-              "First Name: " + student.first_name + "\n" +
-              "Last Name: " + student.last_name + "\n" +
-              "Enrolled: " + student.enrolled + "\n";
+        success: function (response) {
+          console.log(response);
 
-            $("#mydiv").text(formattedText); // Display the formatted text
-          } else {
-            $("#mydiv").text("Student not found.");
-          }
+          var studentInfo = {
+            "ID": response.record_id,
+            "First Name": response.first_name,
+            "Last Name": response.last_name,
+            "Enrolled": response.enrolled
+          };
+
+          var formattedInfo = Object.keys(studentInfo).map(function (key) {
+            return key + ": " + studentInfo[key];
+          });
+
+          $("#mydiv").html(formattedInfo.join("<br><br>"));
         },
         error: function (xhr) {
+          console.log(xhr.responseText)
           $("#mydiv").text('error: ' + xhr.responseText);
         }
       });
@@ -46,7 +50,7 @@
 
   </script>
 
-<p><a href="index.html">Back to Home</a></p>
+  <p><a href="/index2.html">Back to Home</a></p>
 
 </body>
 
