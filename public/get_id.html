@@ -1,9 +1,9 @@
-<!-- filename: getStudentById.html -->
+<!-- filename: searchStudentById.html -->
 <!DOCTYPE html>
 <html>
 
 <head>
-  <title>Get Student by Record ID</title>
+  <title>Search Student by Record ID</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
@@ -12,45 +12,41 @@
   <label for="record_id">Record ID:</label>
   <input type="text" id="record_id" name="record_id"><br><br>
 
-  <button onclick="getStudent()">Get Student by ID</button>
+  <button onclick="searchStudent()">Search</button>
   <br>
   <br>
   <div id="mydiv" name="mydiv"></div>
 
   <script>
 
-    function getStudent() {
+    function searchStudent() {
       var record_id_val = $("#record_id").val();
 
       $.ajax({
-        url: "http://localhost:5678/students/search/" + record_id_val, // Endpoint to retrieve a student by ID
+        url: "http://localhost:5678/students/" + record_id_val, // Use the correct URL for record ID search
         type: "get",
         success: function (response) {
           console.log(response);
 
-          var studentInfo = {
-            "ID": response.record_id,
-            "First Name": response.first_name,
-            "Last Name": response.last_name,
-            "Enrolled": response.enrolled
-          };
+          var student = JSON.parse(response);
 
-          var formattedInfo = Object.keys(studentInfo).map(function (key) {
-            return key + ": " + studentInfo[key];
-          });
+          var formattedInfo = "ID: " + student.record_id + "<br>" +
+            "First Name: " + student.first_name + "<br>" +
+            "Last Name: " + student.last_name + "<br>" +
+            "Enrolled: " + student.enrolled + "<br>";
 
-          $("#mydiv").html(formattedInfo.join("<br><br>"));
+          $("#mydiv").html(formattedInfo);
         },
         error: function (xhr) {
           console.log(xhr.responseText)
-          $("#mydiv").text('error: ' + xhr.responseText);
+          $("#mydiv").text('Error: ' + xhr.responseText);
         }
       });
     }
 
   </script>
 
-  <p><a href="/index2.html">Back to Home</a></p>
+  <p><a href="index2.html">Back to Home</a></p>
 
 </body>
 
