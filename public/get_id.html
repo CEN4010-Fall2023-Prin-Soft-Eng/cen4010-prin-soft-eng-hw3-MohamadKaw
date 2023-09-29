@@ -3,50 +3,87 @@
 <html>
 
 <head>
-  <title>Search Student by Record ID</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>Search Student by Record ID</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
 <body>
 
-  <label for="record_id">Record ID:</label>
-  <input type="text" id="record_id" name="record_id"><br><br>
+    <!-- Bootstrap navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="index2.html">My Website</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="post.html">Add Student</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="put.html">Update Student</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="delete.html">Delete Student</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="get_id.html">Display Student by ID</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="get_listall.html">List All Students</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="get_lastname.html">Search Student by Last Name</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-  <button onclick="searchStudent()">Search</button>
-  <br>
-  <br>
-  <div id="mydiv" name="mydiv"></div>
+    <!-- Your existing content goes here -->
+    <div class="container mt-4">
+        <label for="record_id">Record ID:</label>
+        <input type="text" id="record_id" name="record_id"><br><br>
 
-  <script>
+        <button onclick="searchStudent()">Search</button>
+        <br>
+        <br>
+        <div id="mydiv" name="mydiv"></div>
+    </div>
 
-    function searchStudent() {
-      var record_id_val = $("#record_id").val();
 
-      $.ajax({
-        url: "http://localhost:5678/students/" + record_id_val, // Use the correct URL for record ID search
-        type: "get",
-        success: function (response) {
-          console.log(response);
 
-          var student = JSON.parse(response);
+    <!-- Your JavaScript code for searching students by record ID -->
+    <script>
+        function searchStudent() {
+            var record_id_val = $("#record_id").val();
 
-          var formattedInfo = "ID: " + student.record_id + "<br>" +
-            "First Name: " + student.first_name + "<br>" +
-            "Last Name: " + student.last_name + "<br>" +
-            "Enrolled: " + student.enrolled + "<br>";
+            $.ajax({
+                url: "http://localhost:5678/students/" + record_id_val, // Use the correct URL for record ID search
+                type: "get",
+                success: function (response) {
+                    console.log(response);
 
-          $("#mydiv").html(formattedInfo);
-        },
-        error: function (xhr) {
-          console.log(xhr.responseText)
-          $("#mydiv").text('Error: ' + xhr.responseText);
+                    var student = JSON.parse(response);
+
+                    var formattedInfo = "ID: " + student.record_id + "<br>" +
+                        "First Name: " + student.first_name + "<br>" +
+                        "Last Name: " + student.last_name + "<br>" +
+                        "Enrolled: " + student.enrolled + "<br>";
+
+                    $("#mydiv").html(formattedInfo);
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText)
+                    $("#mydiv").text('Error: ' + xhr.responseText);
+                }
+            });
         }
-      });
-    }
+    </script>
 
-  </script>
-
-  <p><a href="index2.html">Back to Home</a></p>
+    <p><a href="index2.html">Back to Home</a></p>
 
 </body>
 

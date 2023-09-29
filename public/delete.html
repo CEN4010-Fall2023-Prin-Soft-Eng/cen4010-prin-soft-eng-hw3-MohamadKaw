@@ -3,42 +3,82 @@
 <html>
 
 <head>
-  <title>Delete Student</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>Delete Student</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
 <body>
 
-  <label for="studentId">Student ID:</label>
-  <input type="text" id="studentId" name="studentId"><br><br>
+    <!-- Bootstrap navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="index2.html">My Website</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="post.html">Add Student</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="put.html">Update Student</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="delete.html">Delete Student</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="get_id.html">Display Student by ID</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="get_listall.html">List All Students</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="get_lastname.html">Search Student by Last Name</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-  <button onclick="deleteStudent()">Delete Student</button>
-  <br>
-  <br>
-  <div id="mydiv" name="mydiv"></div>
+    <!-- Your existing content goes here -->
+    <div class="container mt-4">
+        <label for="studentId">Student ID:</label>
+        <input type="text" id="studentId" name="studentId"><br><br>
 
-  <script>
+        <button onclick="deleteStudent()">Delete Student</button>
+        <br>
+        <br>
+        <div id="mydiv" name="mydiv"></div>
+    </div>
 
-    function deleteStudent() {
-      var studentId_val = $("#studentId").val();
+    <!-- Add Bootstrap JS and jQuery scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-      $.ajax({
-        url: "http://localhost:5678/students/" + studentId_val, // Endpoint to delete a student by ID
-        type: "delete",
-        success: function (response) {
-          console.log(response)
-          $("#mydiv").text(response.message);
-        },
-        error: function (xhr) {
-          console.log(xhr.responseText)
-          $("#mydiv").text('error: ' + xhr.responseText);
+    <!-- Your JavaScript code for deleting a student by ID -->
+    <script>
+        function deleteStudent() {
+            var studentId_val = $("#studentId").val();
+
+            $.ajax({
+                url: "http://localhost:5678/students/" + studentId_val, // Endpoint to delete a student by ID
+                type: "delete",
+                success: function (response) {
+                    console.log(response)
+                    $("#mydiv").text(response.message);
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText)
+                    $("#mydiv").text('Error: ' + xhr.responseText);
+                }
+            });
         }
-      });
-    }
+    </script>
 
-  </script>
-
-<p><a href="/index2.html">Back to Home</a></p>
+    <p><a href="/index2.html">Back to Home</a></p>
 
 </body>
 

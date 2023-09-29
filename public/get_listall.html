@@ -3,60 +3,102 @@
 <html>
 
 <head>
-  <title>List All Students</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <style>
-    /* Add some basic styling to format the list */
-    #mydiv {
-      white-space: pre-line; /* This ensures line breaks are preserved */
-    }
-  </style>
+    <title>List All Students</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        /* Add some basic styling to format the list */
+        #mydiv {
+            white-space: pre-line; /* This ensures line breaks are preserved */
+        }
+    </style>
 </head>
 
 <body>
 
-  <button onclick="listAllStudents()">List All Students</button>
-  <br>
-  <br>
-  <div id="mydiv" name="mydiv"></div>
+    <!-- Bootstrap navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="index2.html">My Website</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="post.html">Add Student</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="put.html">Update Student</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="delete.html">Delete Student</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="get_id.html">Display Student by ID</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="get_listall.html">List All Students</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="get_lastname.html">Search Student by Last Name</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-  <script>
+    
+    <div class="container mt-4">
+        <button onclick="listAllStudents()">List All Students</button>
+        <br>
+        <br>
+        <div id="mydiv" name="mydiv"></div>
+    </div>
 
-    function listAllStudents() {
-      $.ajax({
+
+
+    <!-- Your JavaScript code for listing all students -->
+    <script>
+function listAllStudents() {
+    $.ajax({
         url: "http://localhost:5678/students",
         type: "get",
         success: function (response) {
-          console.log(response);
+            console.log("Response:", response);
 
-          var studentsList = response.students.map(function (student) {
-            return {
-              "ID": student.record_id,
-              "First Name": student.first_name,
-              "Last Name": student.last_name,
-              "Enrolled": student.enrolled
-            };
-          });
+            if (response && Array.isArray(response.students)) {
+                var studentsList = response.students.map(function (student) {
+                    return {
+                        "ID": student.record_id,
+                        "First Name": student.first_name,
+                        "Last Name": student.last_name,
+                        "Enrolled": student.enrolled
+                    };
+                });
 
-          var formattedList = studentsList.map(function (student) {
-            return "ID: " + student.ID + "\n" +
-                   "First Name: " + student["First Name"] + "\n" +
-                   "Last Name: " + student["Last Name"] + "\n" +
-                   "Enrolled: " + student.Enrolled + "\n";
-          });
+                var formattedList = studentsList.map(function (student) {
+                    return "ID: " + student.ID + "\n" +
+                        "First Name: " + student["First Name"] + "\n" +
+                        "Last Name: " + student["Last Name"] + "\n" +
+                        "Enrolled: " + student.Enrolled + "\n";
+                });
 
-          $("#mydiv").text(formattedList.join("\n"));
+                $("#mydiv").text(formattedList.join("\n"));
+            } else {
+                $("#mydiv").text('No students found.');
+            }
         },
-        error: function (xhr) {
-          console.log(xhr.responseText)
-          $("#mydiv").text('error: ' + xhr.responseText);
+        error: function (xhr, textStatus, errorThrown) {
+            console.error("Error:", textStatus, errorThrown);
+            $("#mydiv").text('Error: ' + textStatus);
         }
-      });
-    }
+    });
+}
 
-  </script>
+    </script>
 
-<p><a href="/index2.html">Back to Home</a></p>
+    <p><a href="index2.html">Back to Home</a></p>
 
 </body>
 
